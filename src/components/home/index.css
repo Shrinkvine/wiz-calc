@@ -1,0 +1,11 @@
+.calc-button {
+  background-color: rgb(78, 78, 209) !important;
+  color: white !important;
+}
+.add-button {
+    background-color: rgb(33, 161, 21) !important;
+    color: white !important;
+}
+.button-div {
+    margin: 35px !important;
+}
