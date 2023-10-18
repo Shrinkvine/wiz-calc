@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  TextField,
   Paper,
   Box,
   Typography,
@@ -17,9 +16,12 @@ import {
   debuffs,
   Effect,
   EffectType,
+  Titles,
+  Endpoints,
 } from "../../helpers/constants";
 import BuffDebuff from "../buffs-debuffs";
 import "./index.css";
+import { requestData } from "../../helpers/http-client";
 
 const Home: React.FC = () => {
   const [currentInputs, setCurrentInputs] = useState<Effect[]>(wizardStats);
@@ -27,7 +29,7 @@ const Home: React.FC = () => {
 
   const handleChange =
     (id: string) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = parseFloat(event.target.value) || 0;
+      const value = parseFloat(event.target.value) || undefined;
       const updatedValues = currentInputs.map((a) =>
         a.id === id ? { ...a, value } : { ...a }
       );
@@ -55,8 +57,15 @@ const Home: React.FC = () => {
       { text, icon, type, id: `${text}-${type}-${Date.now()}` },
     ]);
   };
-
-  const calculate = () => console.log(currentInputs);
+  const calculate = async () => {
+    const data = currentInputs.map(a => {
+      const { text, icon, required, id, ...body } = a;
+      return body;
+    });
+    console.log(data)
+    return
+    const response = await requestData(Endpoints.GET_CALCULATION, data);
+  };
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -77,7 +86,7 @@ const Home: React.FC = () => {
         </Typography>
         <Grid container spacing={3}>
           <BuffDebuff
-            title="Wizard Stats"
+            title={Titles.BASE_STATS}
             currentInputs={currentInputs}
             handleChange={handleChange}
             handleDeleteClick={handleDeleteClick}
@@ -85,7 +94,7 @@ const Home: React.FC = () => {
 
           {hasBuffs && (
             <BuffDebuff
-              title="Buffs"
+              title={Titles.BUFFS}
               currentInputs={currentInputs}
               handleChange={handleChange}
               handleDeleteClick={handleDeleteClick}
@@ -93,7 +102,7 @@ const Home: React.FC = () => {
           )}
           {hasDebuffs && (
             <BuffDebuff
-              title="Debuffs"
+              title={Titles.DEBUFFS}
               currentInputs={currentInputs}
               handleChange={handleChange}
               handleDeleteClick={handleDeleteClick}
@@ -120,7 +129,7 @@ const Home: React.FC = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <Button className="calc-button button-div" onClick={calculate}>
+            <Button variant="contained" className="calc-button button-div" onClick={calculate} disabled={currentInputs.some(a => a.value == null)}>
               Calculate
             </Button>
           </Grid>

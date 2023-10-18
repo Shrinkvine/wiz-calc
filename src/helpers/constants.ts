@@ -63,3 +63,9 @@ export const debuffs: Effect[] = [
   { text: "DefAura", icon: "", type: EffectType.DEF_AURA },
   { text: "DefBubble", icon: "", type: EffectType.DEF_BUBBLE },
 ];
+
+export enum Titles {
+  BASE_STATS = "Wizard Stats",
+  BUFFS = "Buffs",
+  DEBUFFS = "Debuffs",
+}

@@ -9,7 +9,7 @@ import {
   Box,
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Effect, buffs, debuffs, wizardStats } from "../../helpers/constants";
+import { Effect, buffs, debuffs, wizardStats, Titles } from "../../helpers/constants";
 
 interface BuffsDebuffsProps {
   title: string;
@@ -40,9 +40,9 @@ const BuffDebuff: React.FC<BuffsDebuffsProps> = ({
       </Grid>
       {currentInputs
         .filter((input) =>
-          (title === "Buffs"
+          (title === Titles.BUFFS
             ? buffs
-            : title === "Debuffs"
+            : title === Titles.DEBUFFS
             ? debuffs
             : wizardStats
           ).some((item) => item.text === input.text)
