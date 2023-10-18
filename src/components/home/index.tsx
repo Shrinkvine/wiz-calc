@@ -23,7 +23,11 @@ import BuffDebuff from "../buffs-debuffs";
 import "./index.css";
 import { requestData } from "../../helpers/http-client";
 
-const Home: React.FC = () => {
+interface HomeProps {
+  setIsLoading: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const Home: React.FC<HomeProps> = ({ setIsLoading }) => {
   const [currentInputs, setCurrentInputs] = useState<Effect[]>(wizardStats);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -58,12 +62,16 @@ const Home: React.FC = () => {
     ]);
   };
   const calculate = async () => {
-    const data = currentInputs.map(a => {
+    const data = currentInputs.map((a) => {
       const { text, icon, required, id, ...body } = a;
       return body;
     });
-    console.log(data)
-    return
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+      console.log(data);
+    }, 5000);
+    return;
     const response = await requestData(Endpoints.GET_CALCULATION, data);
   };
 
@@ -129,7 +137,13 @@ const Home: React.FC = () => {
                 </MenuItem>
               ))}
             </Menu>
-            <Button variant="contained" className="calc-button button-div" onClick={calculate} disabled={currentInputs.some(a => a.value == null)}>
+            <Button
+              variant="contained"
+              size="medium"
+              color="primary"
+              onClick={calculate}
+              disabled={currentInputs.some((a) => a.value == null)}
+            >
               Calculate
             </Button>
           </Grid>
